@@ -1,4 +1,4 @@
-'''
+"""
 
 DeepAR hyper-parameter tuner using Bayesian-optimization.
 
@@ -19,7 +19,7 @@ Usage:
         ex) {num_cells : (20, 40), epochs : 30, ... }
         The parameters used are defined in the class DeepAR.model method
 
-'''
+"""
 import pandas as pd
 import numpy as np
 from typing import Dict, Tuple, List, Union, Optional
@@ -40,17 +40,18 @@ try:
     from bayes_opt import BayesianOptimization
 
 except ImportError as e:
-    print("Bayseian Optimization package cannot be imported. Check if it is installed."
+    print("Bayesian Optimization package cannot be imported. Check if it is installed."
           "If not installed use $ pip install bayesian-optimization")
     exit(-10)
 
-# abstract class for Bayseian Tuner
-class BayseianTuner:
+
+# abstract class for Bayesian Tuner
+class BayesianTuner:
     def __init__(self,
                  # input dataset format not determined
                  train_df,
                  valid_df,
-                 pbounds: Dict[str, Union[Tuple[float, float], int, float]]): # {param_name: (lower, upper), ... }
+                 pbounds: Dict[str, Union[Tuple[float, float], int, float]]):  # {param_name: (lower, upper), ... }
         self.train_df = train_df
         self.valid_df = valid_df
         self.pbounds = pbounds
@@ -58,15 +59,16 @@ class BayseianTuner:
 
     # given forecast and true values, return the sum of all
     def quantile_loss(self, y_true: Union[np.ndarray, pd.Series, pd.DataFrame],
-                            y_forecast: Union[np.ndarray, pd.DataFrame],
-                            quantiles: Optional[List[float]] = None):
+                      y_forecast: Union[np.ndarray, pd.DataFrame],
+                      quantiles: Optional[List[float]] = None):
         # TODO: may modify the base calculation structure base to numpy instead of dataframe, for performance.
         # default quantiles
         if not quantiles:
             quantiles = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
         # check if the quantiles are same
-        assert len(quantiles) == y_forecast.shape[1], "Number of quantiles from forecast and quantiles list is different"
+        assert len(quantiles) == y_forecast.shape[
+            1], "Number of quantiles from forecast and quantiles list is different"
 
         # cast forecasts to dataframe always
         if isinstance(y_forecast, np.ndarray):
@@ -99,13 +101,14 @@ class BayseianTuner:
         raise NotImplementedError
 
 
-class DeepARTuner(BayseianTuner):
+class DeepARTuner(BayesianTuner):
     def __init__(self, train_df,
                  valid_df,
                  pbounds: Dict[str, Union[Tuple[float, float], int, float]],
                  learning_rate: float,
                  use_feat_dynamic_real: bool = True,
-                 prediction_window: Optional[int] = None):
+                 prediction_window: Optional[int] = None,
+                 batch_size: int = 128):
         super().__init__(train_df, valid_df, pbounds)
         # check available device
         if not mx.test_utils.list_gpus():
@@ -119,12 +122,13 @@ class DeepARTuner(BayseianTuner):
             self.prediction_window = prediction_window
 
         else:
-            self.prediction_window = 2*48 # two days as default
+            self.prediction_window = 2 * 48  # two days as default
 
         self.learning_rate = learning_rate
         self.transform_to_ListData()
         self.use_feat_dynamic_real = use_feat_dynamic_real
-        self.internel_iter_num = 0
+        self.batch_size = batch_size
+        self.internal_iter_num = 0
         self.__estimator = None
         self.__predictor = None
         self.__best_loss = 0
@@ -176,8 +180,8 @@ class DeepARTuner(BayseianTuner):
 
         return pd.DataFrame(quantile_forecasts, columns=quantiles, index=tss.index[-self.prediction_window:])
 
-    # deepAR model for bayseian optimization.
-    # This returns the sum of qunatile loss for given parameters selected by bayseian optimier
+    # deepAR model for bayesian optimization.
+    # This returns the sum of quantile loss for given parameters selected by bayesian optimizer
     def model(self,
               epochs,
               context_length,
@@ -187,19 +191,21 @@ class DeepARTuner(BayseianTuner):
 
         estimator_params = {
             'cell_type': 'lstm',
-            'context_length': int(context_length), # may not use in Bayseian Optimization but manually test on two cases
-            'num_cells' : int(num_cells),
+            'context_length': int(context_length),
+            # may not use in Bayesian Optimization but manually test on two cases
+            'num_cells': int(num_cells),
             'num_layers': int(num_layers),
             'use_feat_dynamic_real': self.use_feat_dynamic_real,
-            'epochs' : int(epochs)
+            'epochs': int(epochs)
         }
 
         trainer = Trainer(epochs=int(epochs),
-                          batch_size=64,
+                          batch_size=self.batch_size,
                           ctx=self.ctx,
                           learning_rate=self.learning_rate)
 
-        estimator = DeepAREstimator(estimator_params, trainer=trainer, freq='30min', prediction_length=self.prediction_window)
+        estimator = DeepAREstimator(estimator_params, trainer=trainer, freq='30min',
+                                    prediction_length=self.prediction_window)
 
         predictor = estimator.train(training_data=self.train_ds)
 
@@ -210,16 +216,16 @@ class DeepARTuner(BayseianTuner):
         quantile_loss = self.quantile_loss(y_true, forecast_df)
 
         # record inserting
-        iter_record = pd.DataFrame(estimator_params, index=[self.internel_iter_num])
+        iter_record = pd.DataFrame(estimator_params, index=[self.internal_iter_num])
         iter_record['epochs'] = int(epochs)
-        iter_record['batch_size'] = 64
+        iter_record['batch_size'] = self.batch_size
         iter_record['learning_rate'] = round(self.learning_rate, 4)
         iter_record['quantile_loss'] = round(quantile_loss)
 
-        self.internel_iter_num += 1
+        self.internal_iter_num += 1
         self._records.append(iter_record)
 
-        # As bayseian optimizer tries to maximize the target value
+        # As bayesian optimizer tries to maximize the target value
         # to make the model work, we need to inverse the sign so that it minimizes the loss
         return -quantile_loss
 
@@ -260,14 +266,15 @@ class DeepARTuner(BayseianTuner):
     def tune_model(self,
                    verbose: int = 2,
                    init_points: int = 4,
-                   n_iter: int = 20):
+                   n_iter: int = 20,
+                   saving_folder: Optional[str] = None):
         deepAR = BayesianOptimization(f=self.model, pbounds=self.pbounds, verbose=verbose)
         deepAR.maximize(init_points=init_points, n_iter=n_iter)
         print('best_target_value:', -deepAR.max['target'])
         self.__best_loss = -deepAR.max['target']
 
         trainer = Trainer(epochs=int(deepAR.max['params']['epochs']),
-                          batch_size=64,
+                          batch_size=self.batch_size,
                           ctx=self.ctx,
                           learning_rate=self.learning_rate)
 
@@ -280,6 +287,7 @@ class DeepARTuner(BayseianTuner):
         self.__estimator = estimator
         self.__predictor = predictor
 
+        print("Evaluating on valid set...")
         forecast_df = self.forecast_quantiles(self.valid_ds, predictor, 100)
         forecast_df = self.refine_forecasts(forecast_df)
 
@@ -290,21 +298,21 @@ class DeepARTuner(BayseianTuner):
         print(f'The lowest sum of quantile loss for validation set is {round(quantile_sum, 4)}'
               f' with parameters {deepAR.max["params"]}')
 
-        saving_folder = '/saved_model/model_' + str(round(quantile_sum, 4))
-        curpath = os.getcwd()
-        path = curpath + saving_folder
+        if not saving_folder:
+            curpath = os.getcwd()
+            saving_folder = curpath + '/saved_model/model_' + str(round(quantile_sum, 4))
 
         # model saving
         try:
-            print("Saving the model under " + path + " with records.")
-            Path(path).mkdir(parents=True)
-            predictor.serialize(Path(path))
+            print("Saving the model under " + saving_folder + " with records.")
+            Path(saving_folder).mkdir(parents=True)
+            predictor.serialize(Path(saving_folder))
             record = self.return_records()
-            record.to_csv(path+'/optimizer_record.csv')
+            record.to_csv(saving_folder + '/optimizer_record.csv')
             print("Successfully saved model.")
 
         except FileExistsError:
-            warnings.warn(f"Saving file or directory already exists in {path}")
+            warnings.warn(f"Saving file or directory already exists in {saving_folder}")
 
         except:
             warnings.warn("Saving file failed due to unknown reason. "
@@ -342,8 +350,8 @@ class DeepARTuner(BayseianTuner):
         else:
             warnings.warn("You must first train the model to get best loss. Call tune_model first.")
 
-    def predict_on_test(self, test_path: str) -> pd.DataFrame:
-        '''
+    def predict_on_test(self, test_path: str, **kwargs) -> pd.DataFrame:
+        """
 
         Parameters
         ----------
@@ -358,7 +366,7 @@ class DeepARTuner(BayseianTuner):
         -------
          DataFrame containing quantile forecasts
 
-        '''
+        """
 
         # if timestamped csv files under timestamped folder are not available,
         # it creates the new one using the test csv given from Dacon
@@ -366,7 +374,7 @@ class DeepARTuner(BayseianTuner):
         timestamped_path = test_stamper.stamp()
         all_quantile_forecasts = []
 
-        for file_num in range(0,81):
+        for file_num in range(0, 81):
             current_file = f'/{file_num}.csv'
             test_df_original = pd.read_csv(timestamped_path + current_file)
             test_df = test_df_original.copy(deep=True)
@@ -376,7 +384,7 @@ class DeepARTuner(BayseianTuner):
             data = np.zeros(shape=(48 * 2, test_df.shape[1]))
 
             # as range starts with index[-1]
-            test_range = pd.date_range(test_df.index[-1], periods=48*2 + 1, freq='30min')[1:]
+            test_range = pd.date_range(test_df.index[-1], periods=48 * 2 + 1, freq='30min')[1:]
             appended_df = pd.DataFrame(data, index=test_range, columns=test_df.columns)
 
             test_df = pd.concat([test_df, appended_df], axis=0)
@@ -384,7 +392,8 @@ class DeepARTuner(BayseianTuner):
             test_ds = ListDataset(
                 [{"start": test_df.index[0],
                   "target": test_df.TARGET.values,
-                  "feat_dynamic_real": [test_df.DHI.values, test_df.DNI.values, test_df.RH.values, test_df['T'].values]}],
+                  "feat_dynamic_real": [test_df.DHI.values, test_df.DNI.values, test_df.RH.values,
+                                        test_df['T'].values]}],
                 freq="30min",
                 one_dim_target=True
             )
@@ -397,7 +406,38 @@ class DeepARTuner(BayseianTuner):
 
         final = pd.concat(all_quantile_forecasts, axis=0)
         final[final < 0] = 0
+
+        self.make_submission(final, **kwargs)
+
         return final
+
+    def make_submission(self, df: pd.DataFrame,
+                        sample_submission_file: Optional[str] = None,
+                        saving_folder_path: Optional[str] = None) -> None:
+        cur_path = os.getcwd()
+
+        if not sample_submission_file:
+            sample_submission_file = cur_path + '/sample_submission.csv'
+
+        if not saving_folder_path:
+            saving_folder_path = cur_path + '/saved_model/model_' + str(round(self.return_best_loss(), 4))
+
+        if not Path(saving_folder_path).is_dir():
+            Path(saving_folder_path).mkdir(parents=True)
+
+        try:
+            sample_sub = pd.read_csv(sample_submission_file, index_col=0)
+            df.index = sample_sub.index
+        except:
+            warnings.warn(f"Could not read sample submission file from {sample_submission_file}.")
+
+        try:
+            df.to_csv(saving_folder_path)
+            print("Submission file is successfully save into " + saving_folder_path)
+
+        except:
+            warnings.warn(f"Could not save the submission file to{saving_folder_path}")
+
 
 ''' example of usage :
 if __name__ == '__main__':
@@ -419,23 +459,4 @@ if __name__ == '__main__':
                'num_cells': (20, 60),
                'num_layers': (2, 6)}
 
-    tuner = DeepARTuner(train, valid, pbounds=pbounds, learning_rate=0.01)
-    tuner.tune_model(n_iter=1)
-
-    print("\nTuner now tries to predict on test_set...")
-    submission = tuner.predict_on_test('./data/test')
-
-    # Need to load sample submission and copy the index to the prediction df
-    submission_path = "./data/submission"
-    sample_submission_file = submission_path + '/sample_submission.csv'
-    submission_file_path = submission_path + f"/submission_{tuner.return_best_loss()}.csv"
-
-    if not Path(submission_path).is_dir():
-        Path(submission_path).mkdir()
-
-    sample_sub = pd.read_csv(sample_submission_file, index_col=0)
-    submission.index = sample_sub.index
-    submission.to_csv(submission_file_path)
-    print("Submission file is successfully save into " + submission_file_path)
-    
-  '''
+   '''
