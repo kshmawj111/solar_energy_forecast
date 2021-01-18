@@ -22,14 +22,17 @@ Usage:
 """
 import pandas as pd
 import numpy as np
-from typing import Dict, Tuple, List, Union, Optional
+from typing import Dict, List
 import mxnet as mx
 import os
 from pathlib import Path
 import warnings
 
-from .utils.timestamper import Timestamper
-from .utils.utilities import *
+from tqdm import tqdm
+from gluonts.mx.distribution import DistributionOutput, StudentTOutput
+
+from utils.timestamper import Timestamper
+from utils.utilities import *
 
 from gluonts.model.predictor import Predictor
 from gluonts.dataset.common import Dataset
@@ -52,35 +55,32 @@ class BayesianTuner:
     def __init__(self,
                  # input dataset format not determined
                  train_df,
-                 valid_df,
-                 pbounds: Dict[str, Union[Tuple[float, float]]]):  # {param_name: (lower, upper), ... }
-        self._best_loss = None
+                 valid_df
+                 ):  # {param_name: (lower, upper), ... }
+        self._valid_loss = None
         self._predictor = None
         self._estimator = None
         self.train_df = train_df
         self.valid_df = valid_df
-        self.pbounds = pbounds
-        self._records = []
+        self.records = []
 
     # given forecast and true values, return the sum of all
     def quantile_loss(self, y_true: Union[np.ndarray, pd.Series, pd.DataFrame],
-                      y_forecast: Union[np.ndarray, pd.DataFrame],
+                      y_forecast: pd.DataFrame,
                       quantiles: Optional[List[float]] = None):
+        y_forecast_copied = y_forecast.copy(deep=True)
+
         # TODO: may modify the base calculation structure base to numpy instead of dataframe, for performance.
         # default quantiles
         if not quantiles:
             quantiles = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
         # check if the quantiles are same
-        assert len(quantiles) == y_forecast.shape[
+        assert len(quantiles) == y_forecast_copied.shape[
             1], "Number of quantiles from forecast and quantiles list is different"
 
-        # cast forecasts to dataframe always
-        if isinstance(y_forecast, np.ndarray):
-            y_forecast = pd.DataFrame(y_forecast, columns=quantiles)
-
-        elif isinstance(y_forecast, pd.DataFrame):
-            y_forecast.columns = quantiles
+        if isinstance(y_forecast_copied, pd.DataFrame):
+            y_forecast_copied.columns = quantiles
 
         # cast y_true
         if isinstance(y_true, pd.DataFrame):
@@ -91,13 +91,13 @@ class BayesianTuner:
             y_true = y_true.values
 
         # quantile loss = max(q*(y_pred - y_true), (1-q)*(y_pred, y_true))
-        for quantile in y_forecast.columns:
-            diff = y_forecast[quantile] - y_true
-            diff = np.where(diff >= 0, diff * quantile, (quantile - 1) * diff)
-            y_forecast[quantile] = diff
+        for quantile in y_forecast_copied.columns:
+            loss = y_forecast_copied[quantile] - y_true  # forcast: (1, predicton_length), y_true: scala value
+            loss = np.where(loss < 0, -loss * (1 - quantile), quantile * loss)
 
-        return y_forecast.sum().sum()
+            y_forecast_copied[quantile] = loss
 
+        return y_forecast_copied.sum().sum()
 
     # abstract method
     def model(self, **kwargs):
@@ -108,8 +108,8 @@ class BayesianTuner:
 
     # exception handling
     def return_records(self) -> pd.DataFrame:
-        if self._records is not None:
-            return pd.concat(self._records)
+        if self.records is not None:
+            return pd.concat(self.records)
 
         else:
             warnings.warn("You must first train the model to get trained estimator. Call tune_model first.")
@@ -129,22 +129,25 @@ class BayesianTuner:
             warnings.warn("You must first train the model to get trained predictor. Call tune_model first.")
 
     def return_best_loss(self):
-        if self._best_loss != 0:
-            return round(self._best_loss, 4)
+        if self._valid_loss != 0:
+            return round(self._valid_loss, 4)
 
         else:
             warnings.warn("You must first train the model to get best loss. Call tune_model first.")
+
 
 class DeepARTuner(BayesianTuner):
     def __init__(self,
                  train_df: pd.DataFrame,
                  valid_df: pd.DataFrame,
-                 pbounds: Dict[str, Tuple[float, float]],
                  learning_rate: float,
-                 use_feat_dynamic_real: bool = True,
-                 prediction_window: Optional[int] = None,
-                 batch_size: int = 64):
-        super().__init__(train_df, valid_df, pbounds)
+                 target_feature_name: str,
+                 feat_dynamic_features: Optional[List[str]] = None,
+                 prediction_window: int = 48*2,
+                 batch_size: int = 32,
+                 ):
+        super().__init__(train_df, valid_df)
+
         # check available device
         if not mx.test_utils.list_gpus():
             self.ctx = mx.context.cpu()
@@ -152,58 +155,92 @@ class DeepARTuner(BayesianTuner):
         else:
             self.ctx = mx.context.gpu()
 
-        # set prediction length
-        if prediction_window:
-            self.prediction_window = prediction_window
-
-        else:
-            self.prediction_window = 2 * 48  # two days as default
-
+        self.prediction_window = prediction_window
         self.learning_rate = learning_rate
-        self.transform_to_ListData()
-        self.use_feat_dynamic_real = use_feat_dynamic_real
         self.batch_size = batch_size
         self.internal_iter_num = 0
         self.current_saving_folder = None
+        self.feat_dynamic_columns = feat_dynamic_features
+
+        if feat_dynamic_features is not None:
+            self.use_feat_dynamic_real = True
+
+        else:
+            self.use_feat_dynamic_real = False
+
+        self.target_feature_name = target_feature_name
+        self.train_ds = self.transform_to_ListData(train_df, for_train=True, feat_dynamic_real=feat_dynamic_features)
+        self.valid_ds = self.transform_to_ListData(valid_df, for_train=False, feat_dynamic_real=feat_dynamic_features)
 
     # method to convert given dataframe into ListData class of gluonts
-    def transform_to_ListData(self):
-        train_DHI = self.train_df.DHI.values[:-self.prediction_window]
-        train_DNI = self.train_df.DNI.values[:-self.prediction_window]
-        train_RH = self.train_df.RH.values[:-self.prediction_window]
-        train_T = self.train_df['T'][:-self.prediction_window].values
+    """def transform_to_ListData(self):
+        feat_dynamic_real_train = []
+        feat_dynamic_real_valid = []
+
+        if self.use_feat_dynamic_real:
+            for col in self.feat_dynamic_columns:
+                feat_dynamic_real_train.append(self.train_df[col].values[:-self.prediction_window])
+                feat_dynamic_real_valid.append(self.valid_df[col].values)
 
         self.train_ds = ListDataset(
             [{"start": self.train_df.index[0],
-              "target": np.array(self.train_df.TARGET.values[:-self.prediction_window]),
-              "feat_dynamic_real": [train_DHI, train_DNI, train_RH, train_T]
+              "target": self.train_df[self.target_feature_name].values[:-self.prediction_window],
+              "feat_dynamic_real": feat_dynamic_real_train
               }],
             freq="30min",
             one_dim_target=True
         )
 
-        # TODO: Is valid set configured correctly?
-        valid_DHI = self.valid_df.DHI.values[:-self.prediction_window]
-        valid_DNI = self.valid_df.DNI.values[:-self.prediction_window]
-        valid_RH = self.valid_df.RH.values[:-self.prediction_window]
-        valid_T = self.valid_df['T'][:-self.prediction_window].values
+        valid_target = self.valid_df[self.target_feature_name].values[:-self.prediction_window]
+        valid_target = np.append(valid_target, np.zeros((48*2, )))
 
         self.valid_ds = ListDataset(
             [{"start": self.valid_df.index[0],
-              "target": np.array(self.valid_df.TARGET.values[:-self.prediction_window]),
-              "feat_dynamic_real": [valid_DHI, valid_DNI, valid_RH, valid_T]
+              "target": valid_target,
+              "feat_dynamic_real": feat_dynamic_real_valid
               }],
             freq="30min",
             one_dim_target=True
+        )"""
+
+    def transform_to_ListData(self,
+                              dataframe: pd.DataFrame,
+                              for_train: bool,
+                              feat_dynamic_real: Optional[List] = None,
+                              ):
+        feat_dynamic_real_values = []
+
+        if feat_dynamic_real is not None:
+            if for_train:
+                for col in feat_dynamic_real:
+                    feat_dynamic_real_values.append(dataframe[col].values[:-self.prediction_window])
+
+            else:
+                for col in feat_dynamic_real:
+                    feat_dynamic_real_values.append(dataframe[col].values)
+
+        if for_train is True:
+            target = dataframe[self.target_feature_name].values[:-self.prediction_window]
+
+        else:
+            target = dataframe[self.target_feature_name].values
+
+        dataset = ListDataset(
+            [{"start": dataframe.index[0],
+              "target": target,
+              "feat_dynamic_real": feat_dynamic_real_values
+              }],
+            freq='30min',
+            one_dim_target=True
         )
+        return dataset
 
     # calculate the sum of quantile loss from given period
     # quantile forecast values and true values must be entered. Prediction is made in this method
     def forecast_quantiles(self,
                            dataset: Dataset,
                            predictor: Predictor,
-                           num_samples: int = 100,
-                           prediction_window: int = 2*48) -> pd.DataFrame:
+                           num_samples: int = 1000) -> (pd.DataFrame, pd.DataFrame):
         quantile_forecasts = {}
         quantiles = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
@@ -212,12 +249,14 @@ class DeepARTuner(BayesianTuner):
         forecasts = next(forecast_iter)  # forecasts: instance from SampleForecast
         tss = next(ts_iter)  # tss : instance from pd.DataFrame
 
+        samples = pd.DataFrame(forecasts.samples)
+        samples = sort_columns(samples)
+
         for quantile in quantiles:
-            quantile_forecasts[quantile] = forecasts.quantile(quantile)
+            quantile_forecasts[quantile] = parse_from_sample(samples, quantile)
 
-        return pd.DataFrame(quantile_forecasts, columns=quantiles, index=tss.index[-self.prediction_window:])
-
-
+        result = pd.DataFrame(quantile_forecasts, columns=quantiles, index=tss.index[-self.prediction_window:])
+        return samples, result
 
     # deepAR model for bayesian optimization.
     # This returns the sum of quantile loss for given parameters selected by bayesian optimizer
@@ -243,12 +282,12 @@ class DeepARTuner(BayesianTuner):
                           learning_rate=self.learning_rate)
 
         estimator = DeepAREstimator(estimator_params, trainer=trainer, freq='30min',
-                                    prediction_length=self.prediction_window)
+                                    prediction_length=self.prediction_window, distr_output=self.dist_output)
 
         predictor = estimator.train(training_data=self.train_ds)
 
         # TODO: maybe backtest_metrics can be used to shorten the process below
-        forecast_df = self.forecast_quantiles(self.valid_ds, predictor, 200)
+        _, forecast_df = self.forecast_quantiles(self.valid_ds, predictor, 1000)
         forecast_df = refine_forecasts(forecast_df)
         y_true = self.valid_df.TARGET[-self.prediction_window:]
         quantile_loss = self.quantile_loss(y_true, forecast_df)
@@ -261,7 +300,7 @@ class DeepARTuner(BayesianTuner):
         iter_record['quantile_loss'] = round(quantile_loss)
 
         self.internal_iter_num += 1
-        self._records.append(iter_record)
+        self.records.append(iter_record)
 
         # As bayesian optimizer tries to maximize the target value
         # to make the model work, we need to inverse the sign so that it minimizes the loss
@@ -269,28 +308,37 @@ class DeepARTuner(BayesianTuner):
 
     # call this method when you actually tune
     def tune_model(self,
+                   pbounds: Optional[Dict] = None,
+                   dist_output: DistributionOutput = StudentTOutput(),
                    verbose: int = 2,
                    init_points: int = 4,
                    n_iter: int = 20,
                    saving_folder: Optional[str] = None,
-                   skip_tune: bool = False,
-                   plot: bool = False,
+                   plot: bool = True,
+                   num_samples: int = 1000,
                    **kwargs):
-        best_params = None
+        self.dist_output = dist_output
+
+        if pbounds is not None:
+            skip_tune = False
+
+        else:
+            skip_tune = True
 
         # when you want to tune the model
         if not skip_tune:
-            deepAR = BayesianOptimization(f=self.model, pbounds=self.pbounds, verbose=verbose)
+            print('Tuning start...')
+            deepAR = BayesianOptimization(f=self.model, pbounds=pbounds, verbose=verbose)
             deepAR.maximize(init_points=init_points, n_iter=n_iter)
             print('best_target_value:', -deepAR.max['target'])
-            self._best_loss = -deepAR.max['target']
 
             trainer = Trainer(epochs=int(deepAR.max['params']['epochs']),
                               batch_size=self.batch_size,
                               ctx=self.ctx,
-                              learning_rate=self.learning_rate)
+                              learning_rate=self.learning_rate
+                              )
 
-            estimator = DeepAREstimator(deepAR.max['params'], trainer=trainer,
+            estimator = DeepAREstimator(deepAR.max['params'], trainer=trainer, distr_output=self.dist_output,
                                         freq='30min', prediction_length=self.prediction_window,
                                         cell_type='lstm', use_feat_dynamic_real=self.use_feat_dynamic_real)
             best_params = deepAR.max["params"]
@@ -302,14 +350,15 @@ class DeepARTuner(BayesianTuner):
 
         # when you do not want to tune the model but train with give parameter(**kwargs)
         else:
-            print('Only training without tuning process...')
+            print('Training start...')
             best_params = kwargs
             trainer = Trainer(epochs=int(kwargs['epochs']),
-                              batch_size=self.batch_size, ctx=self.ctx,
+                              batch_size=self.batch_size,
+                              ctx=self.ctx,
                               learning_rate=self.learning_rate)
 
             kwargs.pop('epochs', None)
-            estimator = DeepAREstimator(**kwargs, trainer=trainer,
+            estimator = DeepAREstimator(**kwargs, trainer=trainer, distr_output=self.dist_output,
                                         freq='30min', prediction_length=self.prediction_window,
                                         cell_type='lstm', use_feat_dynamic_real=self.use_feat_dynamic_real)
 
@@ -318,40 +367,62 @@ class DeepARTuner(BayesianTuner):
             self._estimator = estimator
             self._predictor = predictor
 
-        print("Evaluating on valid set...")
-        forecast_df = self.forecast_quantiles(self.valid_ds, predictor, 200)
-        forecast_df = refine_forecasts(forecast_df)
+        print("\nEvaluating on valid set...")
+        loss = self.evaluate(self.valid_ds, self.valid_df,
+                             predictor, best_params,
+                             saving_folder=saving_folder_path, num_samples=num_samples,
+                             plot=plot)
 
-        y_true = self.valid_df.TARGET[-self.prediction_window:]
-        quantile_sum = self.quantile_loss(y_true, forecast_df)
+        self._valid_loss = round(loss, 4)
+
+    # evaluate on given dataset and dataframe and returns the loss
+    def evaluate(self,
+                 dataset: ListDataset,
+                 original_dataframe: pd.DataFrame,
+                 predictor,
+                 best_params,
+                 saving_folder,
+                 num_samples: int = 1000,
+                 plot=True) -> float:
+
+        samples, forecast_df = self.forecast_quantiles(dataset, predictor, num_samples)
+
+        refined_forecast_df = refine_forecasts(forecast_df)
+
+        y_true = original_dataframe[self.target_feature_name][-self.prediction_window:]
+        quantile_sum = self.quantile_loss(y_true.values, refined_forecast_df)
 
         print(f'The lowest sum of quantile loss for validation set is {round(quantile_sum, 4)}'
               f' with parameters {best_params}')
 
         # Model saving process
+        directory_name = f'/model_{str(round(quantile_sum, 4))}_{self.dist_output.__class__.__name__[0]}'
         if not saving_folder:
             curpath = os.getcwd()
-            saving_folder = curpath + '/saved_model/model_' + str(round(quantile_sum, 4))
+            saving_folder = curpath + '/saved_model' + directory_name
 
         else:
-            saving_folder = saving_folder + '/model_' + str(round(quantile_sum, 4))
-
-        if plot:
-            try:
-                plot_prob_forecasts(y_true, forecast_df, saving_path=saving_folder)
-            except:
-                warnings.warn("Cannot plot.")
+            saving_folder = saving_folder + directory_name
 
         # model saving
         try:
             print("Saving the model under " + saving_folder + " with records.")
             Path(saving_folder).mkdir(parents=True)
+
             self.current_saving_folder = saving_folder
             predictor.serialize(Path(saving_folder))
 
-            if skip_tune:
+            # to loads it back,
+            # from gluonts.model.predictor import Predictor
+            # predictor_deserialized = Predictor.deserialize(Path("/tmp/"))
+
+            if self.records is not None:
                 record = self.return_records()
                 record.to_csv(saving_folder + '/optimizer_record.csv')
+
+            forecast_df.to_csv(saving_folder + '/before_refine_forecast.csv')
+            refined_forecast_df.to_csv(saving_folder + '/refined_forecast.csv')
+            samples.to_csv(saving_folder + '/samples.csv')
             print("Successfully saved model.")
 
         except FileExistsError:
@@ -361,23 +432,36 @@ class DeepARTuner(BayesianTuner):
             warnings.warn("Saving file failed due to unknown reason. "
                           "High probability of collision in predictor serialization is assumed")
 
-        # to loads it back,
-        # from gluonts.model.predictor import Predictor
-        # predictor_deserialized = Predictor.deserialize(Path("/tmp/"))
+        if plot:
+            try:
+                plot_prob_forecasts(y_true, refined_forecast_df, saving_path=saving_folder)
+            except:
+                warnings.warn("Cannot plot.")
 
+        return quantile_sum
 
-    def predict_on_test(self, test_path: str,
+    def load_predictor(self, predictor_path):
+        self._predictor = Predictor.deserialize(predictor_path)
+
+    def predict_on_test(self,
+                        test_path: str,
+                        fill_method: Optional[str] = None,
+                        num_samples: int = 500,
+                        feat_dynamic_real: Optional[List[str]] = None,
                         **kwargs) -> pd.DataFrame:
         """
 
         Parameters
         ----------
          test_path : str => path of directory or folder containing all the test files
+         fill_method : str => method for filling in the features for prediction. 'ewm', 'rolling' are allowed at the moement.
+         num_samples: int => amount of which to collect for sampling from probability distribution
 
         Inner work
         ----------
          reads each test csv and converts it to ListDataset.
-         # TODO: is the test_data set is correctly configured?
+         If fill_method is not None, then do the job to fill in the features for prediction.
+
 
         Returns
         -------
@@ -385,8 +469,7 @@ class DeepARTuner(BayesianTuner):
 
         """
 
-        #test_df = make_features(test_path)
-        # if timestamped csv files under timestamped folder are not available,
+        # if timestamped csv files for test data under timestamped folder are not available,
         # it creates the new one using the test csv given from Dacon
         test_stamper = Timestamper(test_path=test_path)
         timestamped_path = test_stamper.stamp()
@@ -395,41 +478,32 @@ class DeepARTuner(BayesianTuner):
         for file_num in range(0, 81):
             current_file = f'/{file_num}.csv'
             test_df = pd.read_csv(timestamped_path + current_file)
-            test_df = make_features(test_df)
+
+            if fill_method is not None:
+                test_df = make_features(test_df, method=fill_method)
+
             test_df['Timestamp'] = pd.to_datetime(test_df['Timestamp'])
             test_df = test_df.set_index(test_df['Timestamp'])
 
             test_range = pd.date_range(test_df.index[0], periods=48 * 9, freq='30min')
             test_df.index = test_range
 
+            test_ds = self.transform_to_ListData(test_df, for_train=False, feat_dynamic_real=feat_dynamic_real)
 
-            test_ds = ListDataset(
-                [{"start": test_df.index[0],
-                  "target": test_df.TARGET.values,
-                  "feat_dynamic_real": [test_df.DHI.values, test_df.DNI.values, test_df.RH.values,
-                                        test_df['T'].values]
-                  }],
-                freq="30min",
-                one_dim_target=True
-            )
-
-            forecast_df = self.forecast_quantiles(test_ds, self._predictor, 200)
+            _, forecast_df = self.forecast_quantiles(test_ds, self._predictor, num_samples)
             forecast_df = refine_forecasts(forecast_df)
             forecast_df = pd.DataFrame(forecast_df.values, columns=forecast_df.columns)
 
             all_quantile_forecasts.append(forecast_df)
 
         final = pd.concat(all_quantile_forecasts, axis=0)
-        final[final < 0] = 0
-
-        self.make_submission(final, **kwargs)
+        self.save_submission(final, **kwargs)
 
         return final
 
-    def make_submission(self, target_df: pd.DataFrame,
+    def save_submission(self, target_df: pd.DataFrame,
                         sample_submission_file_path: Optional[str] = None) -> None:
         cur_path = os.getcwd()
-
         if not sample_submission_file_path:
             sample_submission_file_path = cur_path + '/sample_submission.csv'
 
@@ -449,26 +523,45 @@ class DeepARTuner(BayesianTuner):
         except:
             warnings.warn(f"Could not save the submission file to {self.current_saving_folder}")
 
+
 if __name__ == '__main__':
+    import mxnet
+
+    np.random.seed(0)
+    mxnet.random.seed(0)
+
     df = pd.read_csv("./data/Timestamped.csv")
     df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-
     df = df.set_index(df['Timestamp'])
-    cut_edge = pd.to_datetime('2016-12-31 23:30:00')
-    temp = df[{'TARGET', 'DHI', 'DNI', 'RH', 'T'}]
 
-    valid_start = pd.to_datetime('2017-07-01 00:00:00')
-    valid_end = pd.to_datetime('2017-09-09 23:30:00')
+    cut_edge = pd.to_datetime('2017-12-31 23:30:00')  # 2년치 학습
+    temp = df[['TARGET', 'DHI', 'DNI', 'WS', 'RH', 'T']]
 
-    train = temp.copy()
+    valid_start = pd.to_datetime('2018-12-11 00:00:00')
+    valid_end = pd.to_datetime('2018-12-19 23:30:00')
+
+    train = temp[:cut_edge]
     valid = temp[valid_start:valid_end]
 
-    pbounds = {'epochs': (1, 2),
-               'context_length': (48 * 2, 48 * 7),
-               'num_cells': (20, 60),
-               'num_layers': (2, 6)}
+    from gluonts.mx.distribution import *
 
+    dist_output = GaussianOutput()
+
+    saving_folder_path = './saved_model'
+    sample_submission_file = './data/submission/sample_submission.csv'
     test_file_path = './data/test'
 
-    tuner = DeepARTuner(train, valid, pbounds=pbounds, learning_rate=0.01)
-    tuner.predict_on_test(test_file_path)
+    params = {'epochs': 1, # 20
+              'context_length': 105,
+              'num_cells': 47,
+              'num_layers': 6}
+
+    features = ['DHI', 'DNI', 'WS', 'RH', 'T']
+    tuner = DeepARTuner(train, valid, learning_rate=0.001, target_feature_name='TARGET',
+                        batch_size=32, feat_dynamic_features=features)
+    tuner.tune_model(dist_output=dist_output,
+                     saving_folder=saving_folder_path,
+                     **params)
+
+    submission = tuner.predict_on_test(test_path=test_file_path, fill_method='rolling', feat_dynamic_real=features,
+                                       sample_submission_file_path=sample_submission_file)
