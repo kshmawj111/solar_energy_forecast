@@ -19,11 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="Comment for feature maker added">
+    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="optimized calculation of errors between train and test in cal_best_similar">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solar_energy_forecast.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_pattern.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +167,7 @@
       <option name="presentableId" value="Default" />
       <updated>1610982378008</updated>
       <workItem from="1617022792779" duration="228000" />
-      <workItem from="1617594976121" duration="6834000" />
+      <workItem from="1617594976121" duration="11790000" />
     </task>
     <task id="LOCAL-00001" summary="Comment for feature maker added">
       <created>1617597569819</created>
@@ -177,7 +176,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617597569819</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="calculation for best_similar case modified">
+      <created>1617601965844</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1617601965844</updated>
+    </task>
+    <task id="LOCAL-00003" summary="optimized calculation of errors between train and test in cal_best_similar">
+      <created>1617605812959</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1617605812959</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,9 +210,22 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Comment for feature maker added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comment for feature maker added" />
+    <MESSAGE value="calculation for best_similar case modified" />
+    <MESSAGE value="optimized calculation of errors between train and test in cal_best_similar" />
+    <option name="LAST_COMMIT_MESSAGE" value="optimized calculation of errors between train and test in cal_best_similar" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/feature_pattern.py</url>
+          <line>137</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617601168612" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617606712353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>

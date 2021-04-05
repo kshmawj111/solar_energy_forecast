@@ -37,7 +37,7 @@ class FeatureMaker:
         self.test_end = test_end
         self.method = method
         self.searched_result = self.cal_best_similar()
-        self.test_file_name_list = [f'/{x}.csv' for x in range(test_start, test_end)]
+        self.test_file_name_list = [f'{x}.csv' for x in range(test_start, test_end)]
     """
             2021/04/05 comment 추가 (본 프로젝트를 한지 조금 시간이 지난 뒤에 다듬는 중)
 
@@ -81,47 +81,52 @@ class FeatureMaker:
                 search_result[self.train_df.index[day*48]] = rsse # 시작 날짜를 키로 하여 error 기록
 
             search_result = dict(sorted(search_result.items(), key=lambda x: x[1])) # 기록된 오차로 정렬
-            result[test_file_name] = list(search_result.keys())[1:]
+            
+            # value가 0인 항목의 키는 제거하도록
+            for k, v in search_result.items():
+                if v == 0:
+                    del search_result[k]
+                    break
+                    
+            result[test_file_name[1:]] = list(search_result.keys()) #key는 /를 제거하여 순수 번호만 넣기
 
-        self.searched_result = result # result는 test셋의 번호를 키로 가지면서 value로 가장 유사한 시작 날짜를 오름차순 리스트로 가진다.
+        return result   # result는 test셋의 번호를 키로 가지면서 value로 가장 유사한 시작 날짜를 오름차순 리스트로 가진다.
 
-    def get_features_from_train(self, train_df: pd.DataFrame, method: str, file_name: str, num_samples: int):
+    def get_features_from_train(self, method: str, file_name: str, num_samples: int):
         features = None
 
         if method == 'pattern':
-            start_date_idx = train_df.index.get_loc(self.searched_result[file_name][0])
-            features = train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :]
+            start_date_idx = self.train_df.index.get_loc(self.searched_result[file_name][0])
+            features = self.train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :]
 
         elif method == 'pattern_mean':
-            start_date_idx = train_df.index.get_loc(self.searched_result[file_name][0])
-            features = train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :].copy()
+            start_date_idx = self.train_df.index.get_loc(self.searched_result[file_name][0])
+            features = self.train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :].copy()
             features = features.reset_index(drop=True)
 
             for i in range(1, num_samples):
-                start_date_idx = train_df.index.get_loc(self.searched_result[file_name][i])
-                next_features = train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :].copy()
+                start_date_idx = self.train_df.index.get_loc(self.searched_result[file_name][i])
+                next_features = self.train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :].copy()
                 next_features = next_features.reset_index(drop=True)
                 features = features + next_features
 
             features = features / num_samples
 
         elif method == 'pattern_median': # TODO: Not completed
-            start_date_idx = train_df.index.get_loc(self.searched_result[file_name][num_samples//2])
-            features = train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :].copy()
-
+            start_date_idx = self.train_df.index.get_loc(self.searched_result[file_name][num_samples//2])
+            features = self.train_df.iloc[start_date_idx + 48 * 7:start_date_idx + 48 * 9, :].copy()
 
         return features
 
-
     def make_features(self, method: str, num_samples: int = 10):
-        saving_path = f'{self.test_files_dir}/feature_added_{method}'
+        saving_path = fr'{self.test_files_dir}\feature_added_{method}'
         p = Path(saving_path)
 
         if not p.is_dir():
             p.mkdir(parents=True)
 
-        for file_name in self.test_file_name_list:
-            temp = pd.read_csv(self.test_files_dir + '/timestamped/' + file_name).copy()
+        for test_file_name in self.test_file_name_list:
+            temp = pd.read_csv(self.test_files_dir + "\\timestamped\\" + test_file_name).copy()
             temp['Timestamp'] = pd.to_datetime(temp['Timestamp'])
             target_df = temp.set_index('Timestamp')
 
@@ -129,13 +134,13 @@ class FeatureMaker:
             result_df_columns.append('TARGET')
             target_df = target_df[result_df_columns]
 
-            features = self.get_features_from_train(self.train_df, method, file_name, num_samples=num_samples)
+            features = self.get_features_from_train(method, test_file_name, num_samples=num_samples)
             features = features[result_df_columns]
 
             target_df = target_df.append(features)
             date_range = pd.date_range(target_df.index[0], periods=48 * 9, freq='30min')
             target_df.index = date_range
-            target_df.to_csv(saving_path + f'/{file_name}')
+            target_df.to_csv(saving_path + f'\\{test_file_name}')
 
         print(f"all test set csvs are saved under {saving_path}")
 
@@ -143,9 +148,9 @@ class FeatureMaker:
 
 if __name__ == '__main__':
     timestamped = r"C:\Users\kshma\PycharmProjects\solar_energy_forecast\data\Timestamped.csv"
-    test_dir = '../data/valid/timestamped'
+    test_dir = r'C:\Users\kshma\PycharmProjects\solar_energy_forecast\data\valid'
 
     method = ['pattern_mean', 'pattern_median', 'pattern']
-    maker = FeatureMaker(test_dir, timestamped, 'pattern_mean', test_end=5, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
-    result = maker.return_search_result()
+    maker = FeatureMaker(test_dir, timestamped, 'pattern_mean', test_end=2, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
+    maker.make_features('pattern')
 
