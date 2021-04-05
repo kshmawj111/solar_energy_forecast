@@ -136,7 +136,7 @@ def fill_features(test_path: str,
 
         if not p.is_file():
             result = finder.return_search_result()
-            finder.make_features_pattern(method=fill_method, num_samples=10, searched_result=result)
+            finder.make_features(method=fill_method, num_samples=10, searched_result=result)
 
     for file_num in tqdm(range(test_start, test_end), desc=f'adding features to test set using {fill_method}'):
         current_file = f'/{file_num}.csv'

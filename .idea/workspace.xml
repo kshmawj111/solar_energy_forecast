@@ -19,18 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/_base.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/feature_pattern.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/utilities.py" afterDir="false" />
+    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="Comment for feature maker added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parameter_tuner.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/parameter_tuner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solar_energy_forecast.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/timestamper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/timestamper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/utilities.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_pattern.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +65,7 @@
       <recent name="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.parameter_tuner">
+  <component name="RunManager" selected="Python.feature_pattern (1)">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="solar_energy_forecast" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,6 +80,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="feature_pattern (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="solar_energy_forecast" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_pattern.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -141,6 +153,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.feature_pattern (1)" />
         <item itemvalue="Python.parameter_tuner" />
         <item itemvalue="Python.feature_pattern" />
       </list>
@@ -155,8 +168,16 @@
       <option name="presentableId" value="Default" />
       <updated>1610982378008</updated>
       <workItem from="1617022792779" duration="228000" />
-      <workItem from="1617594976121" duration="2540000" />
+      <workItem from="1617594976121" duration="6834000" />
     </task>
+    <task id="LOCAL-00001" summary="Comment for feature maker added">
+      <created>1617597569819</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1617597569819</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,85 +195,11 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610983324458">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610983324458" />
-    <state x="663" y="320" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1611487861700">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="663" y="320" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611487861700" />
-    <state x="830" y="273" key="#xdebugger.XInspectDialog" timestamp="1611473060398">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="830" y="273" key="#xdebugger.XInspectDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611473060398" />
-    <state x="575" y="178" width="792" height="596" key="#xdebugger.evaluate" timestamp="1611476369193">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="575" y="178" width="792" height="596" key="#xdebugger.evaluate/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611476369193" />
-    <state x="739" y="274" key="FileChooserDialogImpl" timestamp="1611503686634">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="739" y="274" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611503686634" />
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom" timestamp="1611506239603">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413804819" />
-    <state width="1899" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239603" />
-    <state width="1899" height="281" key="GridCell.Tab.0.center" timestamp="1611506239603">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413804819" />
-    <state width="1899" height="281" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239603" />
-    <state width="1899" height="281" key="GridCell.Tab.0.left" timestamp="1611506239603">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413804819" />
-    <state width="1899" height="281" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239603" />
-    <state width="1899" height="281" key="GridCell.Tab.0.right" timestamp="1611506239603">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413804819" />
-    <state width="1899" height="281" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239603" />
-    <state width="1899" height="347" key="GridCell.Tab.1.bottom" timestamp="1611506239600">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413796745" />
-    <state width="1899" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239600" />
-    <state width="1899" height="347" key="GridCell.Tab.1.center" timestamp="1611506239600">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413796745" />
-    <state width="1899" height="347" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239600" />
-    <state width="1899" height="347" key="GridCell.Tab.1.left" timestamp="1611506239600">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413796745" />
-    <state width="1899" height="347" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239600" />
-    <state width="1899" height="347" key="GridCell.Tab.1.right" timestamp="1611506239600">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="347" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1611413796745" />
-    <state width="1899" height="347" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611506239600" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1610982428480">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610982428480" />
-    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1611487128594">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611487128594" />
-    <state x="-1920" y="0" width="1915" height="1027" maximized="true" key="dock-window-1" timestamp="1611808282695">
-      <screen x="-1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1920" y="0" width="1915" height="1027" maximized="true" key="dock-window-1/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1611808282695" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Comment for feature maker added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Comment for feature maker added" />
   </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="merged" />
-      </configuration>
-    </watches-manager>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617601168612" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
