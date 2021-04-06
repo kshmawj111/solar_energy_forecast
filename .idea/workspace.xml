@@ -19,10 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="integrating feature making methods into FeatureMaker class">
+    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="Refactoring parameter tuner to fit FeatureMaker done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solar_energy_forecast.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_pattern.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/feature_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_maker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/parameter_tuner.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/parameter_tuner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +71,7 @@
       <recent name="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.feature_pattern (1)">
+  <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="solar_energy_forecast" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -93,7 +94,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="feature_pattern (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="feature_maker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="solar_energy_forecast" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -103,7 +104,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/feature_pattern.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\feature_maker.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -112,7 +113,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="feature_pattern" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="feature_maker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="solar_energy_forecast" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -125,7 +126,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\feature_pattern.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\feature_maker.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -158,9 +159,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.feature_pattern (1)" />
+        <item itemvalue="Python.feature_maker" />
         <item itemvalue="Python.parameter_tuner" />
-        <item itemvalue="Python.feature_pattern" />
+        <item itemvalue="Python.feature_maker" />
       </list>
     </recent_temporary>
   </component>
@@ -175,7 +176,7 @@
       <workItem from="1617022792779" duration="228000" />
       <workItem from="1617594976121" duration="12295000" />
       <workItem from="1617621694658" duration="596000" />
-      <workItem from="1617696649044" duration="3099000" />
+      <workItem from="1617696649044" duration="8327000" />
     </task>
     <task id="LOCAL-00001" summary="Comment for feature maker added">
       <created>1617597569819</created>
@@ -212,7 +213,42 @@
       <option name="project" value="LOCAL" />
       <updated>1617698608872</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="integrating feature making methods into FeatureMaker class Done">
+      <created>1617699789541</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1617699789541</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Refactoring on parameter_tuner in predict_on_test to apply changed FeatureMaker">
+      <created>1617700065783</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1617700065783</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Optimized feature pattern by merging make_features methods">
+      <created>1617703581976</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1617703581976</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Optimized feature pattern by merging two make_features methods">
+      <created>1617704360792</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1617704360792</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Refactoring parameter tuner to fit FeatureMaker done">
+      <created>1617704858247</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1617704858247</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,9 +272,14 @@
     <MESSAGE value="optimized calculation of errors between train and test in cal_best_similar" />
     <MESSAGE value="feature pattern done" />
     <MESSAGE value="integrating feature making methods into FeatureMaker class" />
-    <option name="LAST_COMMIT_MESSAGE" value="integrating feature making methods into FeatureMaker class" />
+    <MESSAGE value="integrating feature making methods into FeatureMaker class Done" />
+    <MESSAGE value="Refactoring on parameter_tuner in predict_on_test to apply changed FeatureMaker" />
+    <MESSAGE value="Optimized feature pattern by merging make_features methods" />
+    <MESSAGE value="Optimized feature pattern by merging two make_features methods" />
+    <MESSAGE value="Refactoring parameter tuner to fit FeatureMaker done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring parameter tuner to fit FeatureMaker done" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617698966414" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617703247699" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>

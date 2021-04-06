@@ -1,7 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
-import copy
 import numpy as np
 
 """
@@ -260,7 +259,7 @@ class FeatureMaker:
 
         result_file_name = f'\\test_{method}.csv' if from_train is False else f'\\test_{method}_from_train.csv'
         merged.to_csv(self.test_files_dir + result_file_name)
-        return saving_path, merged
+        return merged
 
 
 if __name__ == '__main__':

@@ -4,9 +4,7 @@ from typing import Union, Optional, List
 import matplotlib.pyplot as plt
 import warnings
 from .timestamper import Timestamper
-from tqdm import tqdm
 from pathlib import Path
-from src.feature_pattern import FeatureMaker
 
 
 # from EDA, we know that some time in a day records target 0 always.
@@ -146,29 +144,7 @@ def plot_prob_forecasts(
         return quantile_forecasts_copied
 
 
-# sort df
-def sort_columns(sample_df: pd.DataFrame):
-    temp = sample_df.copy(deep=True)
-    result = pd.DataFrame()
-
-    for col in temp.columns:
-        t = temp[col]
-        t = t.sort_values(ascending=True)
-        t = t.reset_index(drop=True)
-        result[col] = t
-
-    return result
-
-
-# find quantile row
-def parse_from_sample(sample_df: pd.DataFrame, quantile: float):
-    quantile_index = sample_df.shape[0] * quantile - 1
-
-    result = sample_df.loc[quantile_index, :].values
-    return result
-
-
-# abstract class for Bayesian Tuner
+# calculation of quantile loss with given dataset
 def quantile_loss(y_true: Union[np.ndarray, pd.Series, pd.DataFrame],
                   y_forecast: pd.DataFrame,
                   quantiles: Optional[List[float]] = None):
