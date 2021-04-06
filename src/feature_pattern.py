@@ -25,7 +25,6 @@ class FeatureMaker:
     def __init__(self,
                  test_path: str,
                  timestamped_train_dir: str,
-                 method: str,
                  feature_columns: list,
                  test_file_end: int,
                  test_file_start: int = 0,
@@ -37,7 +36,6 @@ class FeatureMaker:
         self.feature_columns = feature_columns
         self.test_file_start = test_file_start
         self.test_file_end = test_file_end
-        self.method = method
         self.searched_result = None
         self.test_file_name_list = [f'{x}.csv' for x in range(test_file_start, test_file_end)]
 
@@ -69,8 +67,6 @@ class FeatureMaker:
             target_df.index = date_range
             target_df.to_csv(saving_path + f'\\{test_file_name}')
 
-        print(f"all test set csvs are saved under {saving_path}")
-        
         
     def cal_best_similar(self):
         result = {}
@@ -138,22 +134,24 @@ class FeatureMaker:
     """
     
     
-    def make_features_from_test(self, method: str, saving_path: str) -> pd.DataFrame:
-        test_df = []
-        parts = []
+    def make_features_from_test(self, method: str, saving_path: str):
+        for test_file_name in self.test_file_name_list:
+            added_df = []
+            parts = []
 
-        # sort by hour and minute
-        sorted_df = self.train_df.sort_values(['Hour', 'Minute'], ascending=True)
+            test_df = pd.read_csv(self.test_files_dir+'\\'+test_file_name)
 
-        for df_num in range(0, 48):
-            part_of_df = sorted_df.iloc[df_num * 7:(df_num + 1) * 7, ]
-            parts.append(self.fill_in_prediction_features(part_of_df, method=method))
+            # sort by hour and minute
+            sorted_df = test_df.sort_values(['Hour', 'Minute'], ascending=True)
 
-        test_df.append(pd.concat(parts))
-        result = pd.concat(test_df)
-        result = result.sort_values(['Day', 'Hour', 'Minute'], ascending=True)
-        return result
+            for df_num in range(0, 48): # 2일치 데이터
+                part_of_df = sorted_df.iloc[df_num * 7:(df_num + 1) * 7, ]
+                parts.append(self.fill_in_prediction_features(part_of_df, method=method))
 
+            added_df.append(pd.concat(parts))
+            result = pd.concat(added_df)
+            result = result.sort_values(['Day', 'Hour', 'Minute'], ascending=True)
+            result.to_csv(saving_path+f'\\{test_file_name}', index=False)
 
     # short forecast for features in the range to predict
     def fill_in_prediction_features(self, df: pd.DataFrame, method: str, windows_size: int = 2,
@@ -216,8 +214,11 @@ class FeatureMaker:
 
 
         else:
-            self.make_features_from_test(method)
+            self.make_features_from_test(method, saving_path)
 
+        print(f"all test set csvs are saved under {saving_path}")
+
+        return saving_path
 
 
 
@@ -226,7 +227,7 @@ if __name__ == '__main__':
     timestamped = r"C:\Users\kshma\PycharmProjects\solar_energy_forecast\data\Timestamped.csv"
     test_dir = r'C:\Users\kshma\PycharmProjects\solar_energy_forecast\data\valid'
 
-    method = ['pattern_mean', 'pattern_median', 'pattern']
-    maker = FeatureMaker(test_dir, timestamped, 'pattern_mean', test_file_end=2, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
-    maker.make_features_from_train('pattern')
+    method = ['mean', 'median', 'pattern']
+    maker = FeatureMaker(test_dir, timestamped, test_file_end=2, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
+    maker.make_features('rolling', from_train=False)
 

@@ -19,11 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="feature pattern done">
+    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="integrating feature making methods into FeatureMaker class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/solar_energy_forecast.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/feature_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_pattern.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parameter_tuner.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/parameter_tuner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -98,9 +97,6 @@
       <module name="solar_energy_forecast" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -179,7 +175,7 @@
       <workItem from="1617022792779" duration="228000" />
       <workItem from="1617594976121" duration="12295000" />
       <workItem from="1617621694658" duration="596000" />
-      <workItem from="1617696649044" duration="1884000" />
+      <workItem from="1617696649044" duration="3099000" />
     </task>
     <task id="LOCAL-00001" summary="Comment for feature maker added">
       <created>1617597569819</created>
@@ -209,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617606884670</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="integrating feature making methods into FeatureMaker class">
+      <created>1617698608872</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1617698608872</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,9 +235,10 @@
     <MESSAGE value="calculation for best_similar case modified" />
     <MESSAGE value="optimized calculation of errors between train and test in cal_best_similar" />
     <MESSAGE value="feature pattern done" />
-    <option name="LAST_COMMIT_MESSAGE" value="feature pattern done" />
+    <MESSAGE value="integrating feature making methods into FeatureMaker class" />
+    <option name="LAST_COMMIT_MESSAGE" value="integrating feature making methods into FeatureMaker class" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617606712353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617698966414" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>

@@ -49,62 +49,6 @@ def refine_forecasts(forecasts: pd.DataFrame, ) -> pd.DataFrame:
     return copied
 
 
-# if timestamped csv files for test data under timestamped folder are not available,
-# it creates the new one using the test file
-def fill_features(test_path: str,
-                  test_start: int,
-                  test_end: int,
-                  finder: FeatureMaker,
-                  fill_method: str = None
-                  ) -> pd.DataFrame:
-    test_stamper = Timestamper(target_file_path=test_path, test_start=test_start, test_end=test_end)
-    timestamped_path = test_stamper.stamp()
-    merged = []
-
-    if isinstance(fill_method, str) and fill_method[:7] == 'pattern':
-        saving_path = f'{test_path}/feature_added_{fill_method}/0.csv'
-
-        p = Path(saving_path)
-
-        if not p.is_file():
-            finder.make_features_from_train(method=fill_method, num_samples=10)
-
-    for file_num in tqdm(range(test_start, test_end), desc=f'adding features to test set using {fill_method}'):
-        current_file = f'/{file_num}.csv'
-        test_df = pd.read_csv(timestamped_path + current_file)
-
-        if isinstance(fill_method, str) and fill_method[:7] == 'pattern':
-            test_df = pd.read_csv(f'{test_path}/feature_added_{fill_method}' + current_file, index_col=0)
-
-        else:
-            if fill_method:
-                test_df = make_features(test_df, method=fill_method)
-
-            test_df['Timestamp'] = pd.to_datetime(test_df['Timestamp'])
-            test_df = test_df.set_index(test_df['Timestamp'])
-
-            start_date = None
-
-            for date in test_df.index:
-                if date != np.NaN:
-                    start_date = date
-                    break
-
-            if len(test_df) != 48*9:
-                t = pd.DataFrame(np.zeros(48*2))
-                test_df = test_df.append(t)
-
-            test_range = pd.date_range(start_date, periods=48 * 9, freq='30min')
-            test_df.index = test_range
-
-        merged.append(test_df)
-
-    merged = pd.concat(merged)
-    merged.to_csv(test_path + f'/test_{fill_method}.csv')
-
-    return merged
-
-
 def make_validation_set(temp_df, min_month: int, max_month: int, test_start=0, test_end=81):
     from pathlib import Path
     import shutil
