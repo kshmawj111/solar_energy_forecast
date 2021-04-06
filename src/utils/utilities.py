@@ -49,74 +49,6 @@ def refine_forecasts(forecasts: pd.DataFrame, ) -> pd.DataFrame:
     return copied
 
 
-# add feature values (DHI, DNI etc..) using various short forecasting methods.
-# returns a dataframe of all test table with forecasted data
-# it  is for DeepAR, not DeepVAR, which requires feature columns data for prediction length
-# And that is why we rejected using DeepAR.
-def make_features(target_dataframe: pd.DataFrame,
-                  method: str,
-                 ) -> pd.DataFrame:
-    # short forecast for features in the range to predict
-    def fill_in_prediction_features(df: pd.DataFrame,
-                                    method: str,
-                                    windows_size: int = 2,
-                                    prediction_period: int = 2
-                                    ) -> pd.DataFrame:
-        temp = df.copy(deep=True)
-
-        for day in range(prediction_period):
-            ma = None
-
-            if method == 'rolling':
-                ma = temp.rolling(windows_size).mean()
-
-            elif method == 'ewm':
-                ma = temp.ewm(alpha=0.3).mean()
-
-            elif method == 'median':
-                # copy the median value to two features
-                ma = {}
-                columns = temp.columns.copy()
-
-                for col in columns:
-                    if col != 'Timestamp':
-                        ma[col] = [temp[col].median()]
-
-                ma = pd.DataFrame.from_dict(ma)
-
-            elif method == 'mean':  # 8th is mean of previous 3 days, 9 th is mean of previous 6 days
-                columns = temp.columns.copy()
-                columns = columns.drop('Timestamp')
-                mean_temp = temp[columns]
-                ma = mean_temp.iloc[:-(day * 3 + 3), ].mean()
-
-            ma['Day'] = day + 7 + 1
-            ma['TARGET'] = 0
-
-            if isinstance(ma, pd.DataFrame):
-                temp = temp.append(ma.iloc[-1, :])
-
-            elif isinstance(ma, pd.Series):
-                temp = temp.append(ma, ignore_index=True)
-
-        return temp
-
-    test_df = []
-
-    # sort by hour and minute
-    sorted_df = target_dataframe.sort_values(['Hour', 'Minute'], ascending=True)
-
-    parts = []
-    for df_num in range(0, 48):
-        part_of_df = sorted_df.iloc[df_num * 7:(df_num + 1) * 7, ]
-        parts.append(fill_in_prediction_features(part_of_df, method=method))
-
-    test_df.append(pd.concat(parts))
-    result = pd.concat(test_df)
-    result = result.sort_values(['Day', 'Hour', 'Minute'], ascending=True)
-    return result
-
-
 # if timestamped csv files for test data under timestamped folder are not available,
 # it creates the new one using the test file
 def fill_features(test_path: str,
@@ -135,8 +67,7 @@ def fill_features(test_path: str,
         p = Path(saving_path)
 
         if not p.is_file():
-            result = finder.return_search_result()
-            finder.make_features(method=fill_method, num_samples=10, searched_result=result)
+            finder.make_features_from_train(method=fill_method, num_samples=10)
 
     for file_num in tqdm(range(test_start, test_end), desc=f'adding features to test set using {fill_method}'):
         current_file = f'/{file_num}.csv'

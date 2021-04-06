@@ -333,7 +333,7 @@ class DeepVARTuner(BayesianTuner):
         if not Path(test_file_path).is_file():
             if not self.feature_finder and isinstance(fill_method, str) and fill_method[:7] == 'pattern':
                 finder = FeatureMaker(test_path, timestamped_train_dir="../data/Timestamped.csv",
-                                      test_end=test_end, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
+                                      test_file_end=test_end, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
                 self.feature_finder = finder
 
             test_df = fill_features(test_path=test_path, fill_method=fill_method, test_start=test_start,
