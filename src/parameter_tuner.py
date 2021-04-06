@@ -302,7 +302,8 @@ class DeepVARTuner(BayesianTuner):
 
     def predict_on_test(self,
                         test_path: str,
-                        fill_method: Optional[str] = None,
+                        from_train,
+                        fill_method,
                         num_samples: int = 200,
                         test_start: int = 0,
                         test_end: int = 81,
@@ -327,23 +328,17 @@ class DeepVARTuner(BayesianTuner):
 
         """
         all_quantile_forecasts = []
-        filename = f'/test_{fill_method}.csv'
-        test_file_path = test_path + filename
+        file_name = f'\\test_{fill_method}.csv' if from_train is False else f'\\test_{fill_method}_from_train.csv'
+        test_file_path = test_path + file_name
 
+        # 테스트에 사용하는 병합된 파일이 없다면 FeatureMaker로 생성
         if not Path(test_file_path).is_file():
-            if not self.feature_finder and isinstance(fill_method, str) and fill_method[:7] == 'pattern':
-                finder = FeatureMaker(test_path, timestamped_train_dir=r"../data/Timestamped.csv",
-                                      test_file_end=test_end, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
-                self.feature_finder = finder
-
-            test_df = fill_features(test_path=test_path, fill_method=fill_method, test_start=test_start,
-                                    test_end=test_end, finder=self.feature_finder)
+            maker = FeatureMaker(test_path, timestamped_train_dir=r"../data/Timestamped.csv",test_file_end=test_end,
+                                 feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
+            test_df = maker.make_features(fill_method, from_train)
 
         else:
             test_df = pd.read_csv(test_file_path, index_col=0)
-
-        if fill_method != 'pattern':
-            test_df = test_df[self.features]
 
         for file_num in tqdm(range(test_start, test_end), desc='Predicting on each test dataset'):
             temp = test_df.iloc[file_num*48*9:(file_num+1)*48*9, :]
