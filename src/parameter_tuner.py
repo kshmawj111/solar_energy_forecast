@@ -39,7 +39,7 @@ from tqdm import tqdm
 
 from src._base import BayesianTuner
 from src.feature_pattern import FeatureMaker
-from src.utils.utilities import refine_forecasts, plot_prob_forecasts, fill_features, evaluate_on_custom_valid
+from src.utils.utilities import refine_forecasts, plot_prob_forecasts, evaluate_on_custom_valid
 
 
 class DeepVARTuner(BayesianTuner):
