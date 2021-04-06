@@ -31,43 +31,54 @@ class FeatureMaker:
                  ):
         self.test_files_dir = test_path
         self.timestamped_train_dir = timestamped_train_dir
-        self.train_df = pd.read_csv(timestamped_train_dir)
-        self.train_df = self.train_df.set_index('Timestamp')
         self.feature_columns = feature_columns
         self.test_file_start = test_file_start
         self.test_file_end = test_file_end
         self.searched_result = None
         self.test_file_name_list = [f'{x}.csv' for x in range(test_file_start, test_file_end)]
 
+        self.train_df = pd.read_csv(timestamped_train_dir)
+        self.train_df = self.train_df.set_index('Timestamp')
+
+    """
+        공통 메소드
         
+    """
+    def add_datetime_index(self, start_date, feature_added_df: pd.DataFrame):
+        date_range = pd.date_range(start_date, periods=48 * 9, freq='30min')
+        feature_added_df.index = date_range
+
+    def load_test_file(self, test_file_name):
+        test_df = pd.read_csv(self.test_files_dir + "\\timestamped\\" + test_file_name)
+        test_df['Timestamp'] = pd.to_datetime(test_df['Timestamp'])
+        test_df = test_df.set_index('Timestamp')
+        return test_df
+
+    def get_saving_path(self, method, from_train):
+        if from_train:
+            saving_path = fr'{self.test_files_dir}\feature_added_{method}_from_train'
+
+        else:
+            saving_path = fr'{self.test_files_dir}\feature_added_{method}'
+
+        p = Path(saving_path)
+
+        if not p.is_dir():
+            p.mkdir(parents=True)
+
+        return saving_path
+
+
     def return_search_result(self):
         if self.searched_result:
             return self.searched_result
+
 
     """
     
     Training 셋에서 피쳐를 생성
     
     """
-    def make_features_from_train(self, method: str, saving_path: str, num_samples: int = 10):
-        for test_file_name in self.test_file_name_list:
-            temp = pd.read_csv(self.test_files_dir + "\\timestamped\\" + test_file_name).copy()
-            temp['Timestamp'] = pd.to_datetime(temp['Timestamp'])
-            target_df = temp.set_index('Timestamp')
-
-            result_df_columns = copy.deepcopy(self.feature_columns)
-            result_df_columns.append('TARGET')
-            target_df = target_df[result_df_columns]
-
-            features = self.get_features_from_train(method, test_file_name, num_samples=num_samples)
-            features = features[result_df_columns]
-
-            target_df = target_df.append(features)
-            date_range = pd.date_range(target_df.index[0], periods=48 * 9, freq='30min')
-            target_df.index = date_range
-            target_df.to_csv(saving_path + f'\\{test_file_name}')
-
-        
     def cal_best_similar(self):
         result = {}
 
@@ -132,30 +143,10 @@ class FeatureMaker:
         오직 test 셋으로 EMW, EWM 등을 사용하여 추출
     
     """
-    
-    
-    def make_features_from_test(self, method: str, saving_path: str):
-        for test_file_name in self.test_file_name_list:
-            added_df = []
-            parts = []
-
-            test_df = pd.read_csv(self.test_files_dir+'\\'+test_file_name)
-
-            # sort by hour and minute
-            sorted_df = test_df.sort_values(['Hour', 'Minute'], ascending=True)
-
-            for df_num in range(0, 48): # 2일치 데이터
-                part_of_df = sorted_df.iloc[df_num * 7:(df_num + 1) * 7, ]
-                parts.append(self.fill_in_prediction_features(part_of_df, method=method))
-
-            added_df.append(pd.concat(parts))
-            result = pd.concat(added_df)
-            result = result.sort_values(['Day', 'Hour', 'Minute'], ascending=True)
-            result.to_csv(saving_path+f'\\{test_file_name}', index=False)
 
     # short forecast for features in the range to predict
-    def fill_in_prediction_features(self, df: pd.DataFrame, method: str, windows_size: int = 2,
-                                    prediction_period: int = 2) -> pd.DataFrame:
+    def make_features_from_test(self, df: pd.DataFrame, method: str, windows_size: int = 2,
+                                prediction_period: int = 2) -> pd.DataFrame:
         temp = df.copy(deep=True)
 
         for day in range(prediction_period):
@@ -196,28 +187,52 @@ class FeatureMaker:
         return temp
 
     """
-        Public한 method로 이걸 호출하면 됨
+        Public한 method, 다른 클래스와 interact하는 인터페이스
+        결과 값으로
+        
+        
     """
 
-    def make_features(self, method: str, from_train: bool, num_samples: int = 10):
-        saving_path = fr'{self.test_files_dir}\feature_added_{method}'
-        p = Path(saving_path)
+    def make_features(self, method: str, from_train: bool, **kwargs):
+        saving_path = self.get_saving_path(method, from_train)
+        features_added_df = []
 
-        if not p.is_dir():
-            p.mkdir(parents=True)
-
-        if from_train:
-            if not self.searched_result:
-                self.searched_result = self.cal_best_similar()
-
-            self.make_features_from_train(method, saving_path, num_samples)
+        for test_file_name in self.test_file_name_list:
+            test_df = self.load_test_file(test_file_name)
+            start_date = test_df.index[0]
 
 
-        else:
-            self.make_features_from_test(method, saving_path)
+            if from_train:
+                if not self.searched_result:
+                    self.searched_result = self.cal_best_similar()
+
+                f_added_df = self.get_features_from_train(method, test_file_name, **kwargs)
+                f_added_df = test_df.append(f_added_df)
+
+            else:
+                # sort by hour and minute
+                sorted_df = test_df.sort_values(['Hour', 'Minute'], ascending=True)
+                feature_added_df_list = []
+
+                for df_num in range(0, 48):  # 2일치 데이터
+                    part_of_df = sorted_df.iloc[df_num * 7:(df_num + 1) * 7, ]
+                    feature_added_df_list.append(self.make_features_from_test(part_of_df, method=method, **kwargs))
+
+                f_added_df = pd.concat(feature_added_df_list)
+                f_added_df = f_added_df.sort_values(['Day', 'Hour', 'Minute'], ascending=True)
+
+            f_added_df = f_added_df[self.feature_columns + ['TARGET']]
+
+            self.add_datetime_index(start_date, f_added_df)
+            features_added_df.append(f_added_df)
+
+        for x, fn in zip(features_added_df, self.test_file_name_list):
+            x.to_csv(saving_path + f'\\{fn}')
 
         print(f"all test set csvs are saved under {saving_path}")
 
+        merged = pd.concat(features_added_df)
+        merged.to_csv(self.test_files_dir + f'\\test_{method}')
         return saving_path
 
 
@@ -230,4 +245,5 @@ if __name__ == '__main__':
     method = ['mean', 'median', 'pattern']
     maker = FeatureMaker(test_dir, timestamped, test_file_end=2, feature_columns=['DHI', 'DNI', 'WS', 'RH', 'T'])
     maker.make_features('rolling', from_train=False)
+    maker.make_features('mean', True, num_samples=10)
 
