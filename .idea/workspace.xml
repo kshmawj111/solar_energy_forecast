@@ -23,18 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9521e6e-0c29-4039-b689-543a9704c4d0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/solar_energy_forecast.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/a.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aa_module.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/finace_info.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/parameter_tuner.py" beforeDir="false" afterPath="$PROJECT_DIR$/parameter_tuner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/utilities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/주식발행내역.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,6 +181,8 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/solar_energy_forcast" />
     </ignored-roots>
+    <MESSAGE value="merged from integration_of_filling_features" />
+    <option name="LAST_COMMIT_MESSAGE" value="merged from integration_of_filling_features" />
   </component>
   <component name="WindowStateProjectService">
     <state x="586" y="198" key="#Inspections" timestamp="1610847536236">
