@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -19,12 +22,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="Refactoring parameter tuner to fit FeatureMaker done">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/solar_energy_forecast.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_pattern.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_maker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parameter_tuner.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/parameter_tuner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/utilities.py" afterDir="false" />
+    <list default="true" id="a9521e6e-0c29-4039-b689-543a9704c4d0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/solar_energy_forecast.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aa_module.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/finace_info.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/parameter_tuner.py" beforeDir="false" afterPath="$PROJECT_DIR$/parameter_tuner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/주식발행내역.xls" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,14 +49,10 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="multiprocess" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1nFOTCxZOmBrRfxP2zUSUyrws6l" />
+  <component name="ProjectId" id="1mMVyvycu15Pd6ulQaxCkokVA8U" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -55,23 +61,15 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.path.for.package.tslint" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.python" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src" />
+      <recent name="C:\Users\kshma\PycharmProjects\solar_energy_forecast\uitls" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.parameter_tuner">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="solar_energy_forecast" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,34 +85,15 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="feature_maker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="solar_energy_forecast" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\feature_maker.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="feature_maker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="solar_energy_forecast" />
+    <configuration name="aa_module" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="태양열 발전량 예측" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -126,7 +105,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\feature_maker.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/aa_module.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -135,8 +114,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="parameter_tuner" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="solar_energy_forecast" />
+    <configuration name="attention_forecast" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="태양열 발전량 예측" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/models/attention_forecast.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="parameter_tuner" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="태양열 발전량 예측" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -148,7 +149,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\parameter_tuner.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/parameter_tuner.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -159,100 +160,21 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.feature_maker" />
-        <item itemvalue="Python.parameter_tuner" />
-        <item itemvalue="Python.feature_maker" />
+        <item itemvalue="Python.aa_module" />
+        <item itemvalue="Python.attention_forecast" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="41409b58-b8b8-435d-9d86-4bcab28cbb15" name="Default Changelist" comment="" />
-      <created>1610982378008</created>
+      <changelist id="a9521e6e-0c29-4039-b689-543a9704c4d0" name="Default Changelist" comment="" />
+      <created>1609303704483</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1610982378008</updated>
-      <workItem from="1617022792779" duration="228000" />
-      <workItem from="1617594976121" duration="12295000" />
-      <workItem from="1617621694658" duration="596000" />
-      <workItem from="1617696649044" duration="8327000" />
+      <updated>1609303704483</updated>
     </task>
-    <task id="LOCAL-00001" summary="Comment for feature maker added">
-      <created>1617597569819</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1617597569819</updated>
-    </task>
-    <task id="LOCAL-00002" summary="calculation for best_similar case modified">
-      <created>1617601965844</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1617601965844</updated>
-    </task>
-    <task id="LOCAL-00003" summary="optimized calculation of errors between train and test in cal_best_similar">
-      <created>1617605812959</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1617605812959</updated>
-    </task>
-    <task id="LOCAL-00004" summary="feature pattern done">
-      <created>1617606884670</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1617606884670</updated>
-    </task>
-    <task id="LOCAL-00005" summary="integrating feature making methods into FeatureMaker class">
-      <created>1617698608872</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1617698608872</updated>
-    </task>
-    <task id="LOCAL-00006" summary="integrating feature making methods into FeatureMaker class Done">
-      <created>1617699789541</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1617699789541</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Refactoring on parameter_tuner in predict_on_test to apply changed FeatureMaker">
-      <created>1617700065783</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1617700065783</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Optimized feature pattern by merging make_features methods">
-      <created>1617703581976</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1617703581976</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Optimized feature pattern by merging two make_features methods">
-      <created>1617704360792</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1617704360792</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Refactoring parameter tuner to fit FeatureMaker done">
-      <created>1617704858247</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1617704858247</updated>
-    </task>
-    <option name="localTasksCounter" value="11" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -267,17 +189,117 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Comment for feature maker added" />
-    <MESSAGE value="calculation for best_similar case modified" />
-    <MESSAGE value="optimized calculation of errors between train and test in cal_best_similar" />
-    <MESSAGE value="feature pattern done" />
-    <MESSAGE value="integrating feature making methods into FeatureMaker class" />
-    <MESSAGE value="integrating feature making methods into FeatureMaker class Done" />
-    <MESSAGE value="Refactoring on parameter_tuner in predict_on_test to apply changed FeatureMaker" />
-    <MESSAGE value="Optimized feature pattern by merging make_features methods" />
-    <MESSAGE value="Optimized feature pattern by merging two make_features methods" />
-    <MESSAGE value="Refactoring parameter tuner to fit FeatureMaker done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring parameter tuner to fit FeatureMaker done" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/solar_energy_forcast" />
+    </ignored-roots>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="586" y="198" key="#Inspections" timestamp="1610847536236">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="586" y="198" key="#Inspections/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610847536236" />
+    <state x="695" y="343" key="#Notifications" timestamp="1610951988943">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1225" y="343" key="#Notifications/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610535598641" />
+    <state x="695" y="343" key="#Notifications/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610951988943" />
+    <state x="414" y="175" width="1092" height="840" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610513772348">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="175" width="1092" height="840" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610513772348" />
+    <state x="620" y="444" key="#xdebugger.evaluate" timestamp="1610953708966">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="620" y="444" key="#xdebugger.evaluate/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610953708966" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1610945456397">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1180" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610688570833" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610945456397" />
+    <state width="1921" height="356" key="GridCell.Tab.0.bottom" timestamp="1610955937633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937633" />
+    <state width="1921" height="356" key="GridCell.Tab.0.center" timestamp="1610955937633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937633" />
+    <state width="1921" height="356" key="GridCell.Tab.0.left" timestamp="1610955937633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224713" />
+    <state width="1921" height="356" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937633" />
+    <state width="1921" height="356" key="GridCell.Tab.0.right" timestamp="1610955937633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937633" />
+    <state width="1921" height="356" key="GridCell.Tab.1.bottom" timestamp="1610955937634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937634" />
+    <state width="1921" height="356" key="GridCell.Tab.1.center" timestamp="1610955937634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937634" />
+    <state width="1921" height="356" key="GridCell.Tab.1.left" timestamp="1610955937633">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937633" />
+    <state width="1921" height="356" key="GridCell.Tab.1.right" timestamp="1610955937634">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610731224714" />
+    <state width="1921" height="356" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955937634" />
+    <state x="461" y="164" key="SettingsEditor" timestamp="1610945491489">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1459" y="164" key="SettingsEditor/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610688571759" />
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610945491489" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1610955763097">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610726994483" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1610955763097" />
+    <state x="668" y="74" width="662" height="891" key="find.popup" timestamp="1609308945382">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="668" y="74" width="662" height="891" key="find.popup/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1609308945382" />
+    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1610559398340">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1610559398340" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/바탕화면/Forcast/mq_rnn.py</url>
+          <line>260</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/original.py</url>
+          <line>265</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/anaconda3/envs/mxnet/Lib/site-packages/gluonts/model/forecast_generator.py</url>
+          <line>83</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/parameter_tuner.py</url>
+          <line>565</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/__init___py$feature_pattern__1_.coverage" NAME="feature_pattern (1) Coverage Results" MODIFIED="1617703247699" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
