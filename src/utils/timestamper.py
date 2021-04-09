@@ -1,21 +1,21 @@
 import pandas as pd
 from itertools import accumulate
 from pathlib import Path
-from typing import Dict, Tuple, List, Union, Optional
+from typing import Optional
 
-"""
 
-Class for handling datetime and infer datetime using existing time related data
-
-"""
 class Timestamper:
     def __init__(self,
-                 test_path: Optional[str] = None,
-                 test_df: Optional[pd.DataFrame] = None):
+                 target_file_path: str,
+                 test_df: Optional[pd.DataFrame] = None,
+                 test_start: int = 0,
+                 test_end: int = 81):
         # test_path must navigate to the root folder containing test csvs
-        self.__test_path = test_path
-        self.__test_timestamped_path = test_path + '/timestamped'
+        self.__test_path = target_file_path
+        self.__test_timestamped_path = target_file_path + '/timestamped'
         self.__test_df = test_df
+        self.__test_start = test_start
+        self.__test_end = test_end
 
     def calculate_datetime(self, df: pd.DataFrame)->pd.DataFrame:
         df = df.reset_index()
@@ -37,7 +37,7 @@ class Timestamper:
     def stamp(self):
         # if test dataframe is not given, stamp. Exists for legacy compatibility
         if self.__test_df is None:
-            for file_num in range(0, 81):
+            for file_num in range(self.__test_start, self.__test_end):
                 filename = f'/{file_num}.csv'
                 test_file_path = self.__test_path + filename
 
