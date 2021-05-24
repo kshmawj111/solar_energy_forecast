@@ -49,7 +49,7 @@ Dacon Link: https://dacon.io/competitions/official/235680/overview/description/
 
 9) 이후 실험 중에 GluonTS 중 DeepVAR이란 패키지가 있음을 확인받고 해당 모델로 변경했다. 기존 feature를 prediction range에 임의로 추가하는 작업은 시간이 오래걸릴 뿐만 아니라 제대로 학습이 되는 결과인지도 불확실했기 때문이다. 그 결과 DeepAR보다 피처의 변화가 급작스러운 부분, 예를 들면, 비가 와서 일조량이 줄어드는 경우,를 조금 더 잘 찾아내서 예측할 수 있었다.
 
-### DeepAR의 결과물(주피터 노트북에도 예시 결과를 첨부하였다.)
+### DeepAR의 결과 예시 (주피터 노트북에도 예시 결과를 첨부하였다.)
 
 ![image](https://user-images.githubusercontent.com/45940359/119340097-00a40980-bccd-11eb-82f3-dd3f5ff831b0.png) 
 
