@@ -286,8 +286,7 @@ class DeepVARTuner(BayesianTuner):
             warnings.warn(f"File or directory already exists in " + saving_folder)
 
         except:
-            warnings.warn("Saving file failed due to unknown reason."
-                          "High probability of collision in predictor serialization is assumed")
+            warnings.warn("Saving file failed due to unknown reason.")
 
         if plot:
             try:
