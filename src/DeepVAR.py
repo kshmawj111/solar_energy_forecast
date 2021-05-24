@@ -38,7 +38,7 @@ from gluonts.dataset.common import ListDataset
 from tqdm import tqdm
 
 from src._base import BayesianTuner
-from src.feature_maker import FeatureMaker
+from src.utils.feature_maker import FeatureMaker
 from src.utils.utilities import refine_forecasts, plot_prob_forecasts, evaluate_on_custom_valid
 
 

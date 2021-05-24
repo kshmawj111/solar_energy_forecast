@@ -110,7 +110,6 @@ class FeatureMaker:
             test_df = pd.read_csv(self.test_files_dir + test_file_name, index_col=0)  # n_th test file 아 n번째 테스트용 파일
             search_result = {}
 
-            # TODO: Thread로 병렬화
             for day in range(0, 365 * 3 - 6):
                 feature_train = self.train_df.iloc[(day * 48):(day + 7) * 48, ].copy()  # 총 7일치 데이터를 학습용 데이터에서 가져옴
                 feature_train = feature_train[self.feature_columns]  # 필요한 피쳐만 빼옴
@@ -208,13 +207,7 @@ class FeatureMaker:
 
         return temp
 
-    """
-        Public한 method, 다른 클래스와 interact하는 인터페이스
-        결과 값으로
-        
-        
-    """
-
+    # public interface method
     def make_features(self, method: str, from_train: bool, **kwargs):
 
         saving_path = self.get_saving_path(method, from_train)
