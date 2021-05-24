@@ -22,9 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9521e6e-0c29-4039-b689-543a9704c4d0" name="Default Changelist" comment="">
+    <list default="true" id="a9521e6e-0c29-4039-b689-543a9704c4d0" name="Default Changelist" comment="organized files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/feature_maker.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/feature_maker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +64,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\kshma\PycharmProjects\solar_energy_forecast\src\utils" />
       <recent name="C:\Users\kshma\PycharmProjects\solar_energy_forecast\uitls" />
     </key>
   </component>
@@ -154,8 +155,24 @@
       <workItem from="1617967164502" duration="1784000" />
       <workItem from="1617986605453" duration="3000" />
       <workItem from="1618028560043" duration="11000" />
-      <workItem from="1621835761495" duration="108000" />
+      <workItem from="1621835761495" duration="2825000" />
+      <workItem from="1621855453943" duration="118000" />
     </task>
+    <task id="LOCAL-00001" summary="organized files">
+      <created>1621836041989</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1621836041989</updated>
+    </task>
+    <task id="LOCAL-00002" summary="organized files">
+      <created>1621854889003</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1621854889003</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,7 +183,24 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -178,7 +212,8 @@
       <path value="$PROJECT_DIR$/solar_energy_forcast" />
     </ignored-roots>
     <MESSAGE value="merged from integration_of_filling_features" />
-    <option name="LAST_COMMIT_MESSAGE" value="merged from integration_of_filling_features" />
+    <MESSAGE value="organized files" />
+    <option name="LAST_COMMIT_MESSAGE" value="organized files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
