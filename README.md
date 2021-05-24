@@ -20,7 +20,7 @@ Dacon Link: https://dacon.io/competitions/official/235680/overview/description/
 
 1) MQ-RNN : https://arxiv.org/pdf/1711.11053.pdf
 2) DeepAR : https://arxiv.org/abs/1704.04110
-3) DeepVAR : https://arxiv.org/abs/2006.08338
+3) DeepVAR : https://arxiv.org/abs/1910.03002
 
 
 ### 참고 사이트
